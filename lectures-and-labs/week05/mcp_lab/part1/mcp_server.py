@@ -1,11 +1,8 @@
-"""Part 1 server: a calculator with three tools, spoken over stdio.
+"""Part 1 server: a calculator with four tools, spoken over stdio.
 
 The client starts this as a subprocess and talks JSON-RPC to it over
 stdin/stdout. That is why every message this file prints goes to STDERR:
 stdout is the wire, and a stray print there corrupts the protocol.
-
-DIY 2 asks you to add a `power` tool here. Two places need editing: the
-list returned by list_tools(), and the dispatch in call_tool().
 
 DIY 3 asks you to print a line from a handler and notice which process it
 comes from, then to make a handler raise. Look at what the client's trace
@@ -68,6 +65,18 @@ async def list_tools() -> list[Tool]:
                 "required": ["a", "b"],
             },
         ),
+        Tool(
+            name="power",
+            description="Raise x to the power of y",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "x": {"type": "number", "description": "Base"},
+                    "y": {"type": "number", "description": "Exponent"},
+                },
+                "required": ["x", "y"],
+            },
+        ),
     ]
 
 
@@ -83,6 +92,9 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             text = "Error: cannot divide by zero"
         else:
             text = f"Result: {arguments['a']} / {arguments['b']} = {arguments['a'] / arguments['b']}"
+    elif name == "power":
+        print("[server] power called", file=sys.stderr, flush=True)
+        text = f"Result: {arguments['x']} ^ {arguments['y']} = {arguments['x'] ** arguments['y']}"
     else:
         raise ValueError(f"Unknown tool: {name}")
     return [TextContent(type="text", text=text)]

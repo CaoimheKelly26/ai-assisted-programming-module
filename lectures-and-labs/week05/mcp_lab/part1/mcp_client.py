@@ -103,7 +103,11 @@ async def main() -> None:
             result = await session.call_tool("divide", {"a": 100, "b": 4})
             say(f"   {result.content[0].text}")
 
-            say("\n6. divide 10 / 0 -- the server decides what an error looks like")
+            say("\n6. power 2 ^ 10")
+            result = await session.call_tool("power", {"x": 2, "y": 10})
+            say(f"   {result.content[0].text}")
+
+            say("\n7. divide 10 / 0 -- the server decides what an error looks like")
             result = await session.call_tool("divide", {"a": 10, "b": 0})
             say(f"   {result.content[0].text}")
 
