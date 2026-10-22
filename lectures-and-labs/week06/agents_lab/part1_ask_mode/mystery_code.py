@@ -79,7 +79,7 @@ def process_order():
     cart.add_item("Keyboard", 79.99, 1)
     
     # Apply a discount
-    cart.add_discount(10)  # 10% off
+    cart.add_discount(150)  # 150% off
     
     # Show the cart
     cart.display_cart()

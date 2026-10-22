@@ -1,0 +1,13 @@
+
+    Grade Report
+    ============
+    Total Students: 12
+    Average Grade: 65.04
+    Highest Grade: Grace Lee - 95.0
+    Lowest Grade: Lucy May - -10.0
+    
+    Students Needing Retakes (3):
+    
+  - Charlie Brown
+  - Frank Miller
+  - Lucy May

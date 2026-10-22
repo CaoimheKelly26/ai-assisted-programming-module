@@ -26,9 +26,21 @@ def load_grades(filename: str) -> List[Dict[str, any]]:
     with open(filename, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
+            try:
+                grade = float(row['grade'])
+            except (ValueError, TypeError) as error:
+                raise ValueError(
+                    f"Invalid grade on CSV line {reader.line_num}"
+                ) from error
+
+            if grade < 0:
+                raise ValueError(
+                    f"Negative grade on CSV line {reader.line_num}"
+                )
+
             student = {
                 'name': row['name'],
-                'grade': int(row['grade']),  # Bug: What if the value isn't a valid integer?
+                'grade': grade,
                 'subject': row['subject']
             }
             students.append(student)
@@ -36,8 +48,11 @@ def load_grades(filename: str) -> List[Dict[str, any]]:
     return students
 
 
-def calculate_average(grades: List[int]) -> float:
+def calculate_average(grades: List[float]) -> float:
     """Calculate the average of a list of grades."""
+    if not grades:
+        raise ValueError("Cannot calculate an average with no grades")
+
     total = sum(grades)
     average = total / len(grades)  # Bug: What if grades is empty?
     return average
@@ -45,6 +60,9 @@ def calculate_average(grades: List[int]) -> float:
 
 def find_highest_grade(students: List[Dict[str, any]]) -> Dict[str, any]:
     """Find the student with the highest grade."""
+    if not students:
+        raise ValueError("Cannot find the highest grade with no students")
+
     highest = students[0]  # Bug: What if students is empty?
     
     for student in students:
